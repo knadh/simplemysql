@@ -103,6 +103,7 @@ books = db.getAll("books",
 )
 </pre>
 
+
 ##delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)
 
