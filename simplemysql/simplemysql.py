@@ -26,18 +26,21 @@ from collections import namedtuple
 class SimpleMysql:
 	conn = None
 	cur = None
-	creds = None
+	conf = None
 
 	def __init__(self, **kwargs):
-		self.creds = kwargs
+		self.conf = kwargs
+		self.conf["keep_alive"] = True if not "keep_alive" in kwargs \
+								  or self.conf["keep_alive"] else False
+
 		self.connect()
 
 	def connect(self):
 		"""Connect to the mysql server"""
 
 		try:
-			self.conn = MySQLdb.connect(db=self.creds['db'], host=self.creds['host'],
-										user=self.creds['user'], passwd=self.creds['passwd'])
+			self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
+										user=self.conf['user'], passwd=self.conf['passwd'])
 			self.cur = self.conn.cursor() 
 		except:
 			print ("MySQL connection failed")
@@ -134,6 +137,7 @@ class SimpleMysql:
 		return self.query(sql, data.values() + where[1] if where and len(where) < 2 else data.values()
 						).rowcount
 
+
 	def insertOrUpdate(self, table, data, key):
 		insert_data = data.copy()
 
@@ -160,8 +164,16 @@ class SimpleMysql:
 	def query(self, sql, params = None):
 		"""Run a raw query"""
 
+		# check if connection is alive. if not, reconnect
 		try:
 			self.cur.execute(sql, params)
+		except MySQLdb.OperationalError, e:
+			# mysql timed out. reconnect and retry once
+			if e[0] == 2006:
+				self.connect()
+				self.cur.execute(sql, params)
+			else:
+				raise
 		except:
 			print("Query failed")
 			raise
