@@ -22,7 +22,8 @@ db = SimpleMysql(
 	host="localhost",
 	db="mydatabase",
 	user="username",
-	passwd="password"
+	passwd="password",
+	keep_alive=True # try and reconnect timedout mysql connections?
 )
 
 # insert a record to the <em>books</em> table
