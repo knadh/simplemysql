@@ -138,11 +138,13 @@ class SimpleMysql:
 						).rowcount
 
 
-	def insertOrUpdate(self, table, data, key):
+	def insertOrUpdate(self, table, data, keys):
 		insert_data = data.copy()
 
 		insert = self._serialize_insert(data)
-		del data[key]
+
+		for k in keys:
+			del data[k]
 
 		update = self._serialize_update(data)
 
