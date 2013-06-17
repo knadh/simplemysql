@@ -134,7 +134,7 @@ class SimpleMysql:
 		if where and len(where) > 0:
 			sql += " WHERE %s" % where[0]
 
-		return self.query(sql, data.values() + where[1] if where and len(where) < 2 else data.values()
+		return self.query(sql, data.values() + where[1] if where and len(where) > 1 else data.values()
 						).rowcount
 
 
