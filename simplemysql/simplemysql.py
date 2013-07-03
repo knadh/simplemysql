@@ -219,15 +219,15 @@ class SimpleMysql:
 		if order:
 			sql += " ORDER BY %s" % order[0]
 
-			if 1 in order:
-				sql+= " " + order[1]
+			if len(order) > 1:
+				sql+= " %s" % order[1]
 
 		# limit
 		if limit:
 			sql += " LIMIT %s" % limit[0]
 
-			if 1 in LIMIT:
-				sql+= ", " + limit[1]
+			if len(limit) > 1:
+				sql+= ", %s" % limit[1]
 
 		return self.query(sql, where[1] if where and len(where) > 1 else None)
 
@@ -253,15 +253,15 @@ class SimpleMysql:
 		if order:
 			sql += " ORDER BY %s" % order[0]
 
-			if 1 in order:
+			if len(order) > 1:
 				sql+= " " + order[1]
 
 		# limit
 		if limit:
 			sql += " LIMIT %s" % limit[0]
 
-			if 1 in LIMIT:
-				sql+= ", " + limit[1]
+			if len(limit) > 1:
+				sql+= ", %s" % limit[1]
 
 		return self.query(sql, where[1] if where and len(where) > 1 else None)
 
