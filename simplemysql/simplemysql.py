@@ -33,6 +33,8 @@ class SimpleMysql:
 		self.conf["keep_alive"] = True if not "keep_alive" in kwargs \
 								  or self.conf["keep_alive"] else False
 
+		self.conf["charset"] = "utf-8" if not "charset" else self.conf["charset"]
+
 		self.connect()
 
 	def connect(self):
@@ -40,7 +42,8 @@ class SimpleMysql:
 
 		try:
 			self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
-										user=self.conf['user'], passwd=self.conf['passwd'])
+										user=self.conf['user'], passwd=self.conf['passwd'],
+										charset=self.conf['charset'])
 			self.cur = self.conn.cursor() 
 		except:
 			print ("MySQL connection failed")
@@ -70,7 +73,7 @@ class SimpleMysql:
 
 
 	def getAll(self, table=None, fields='*', where=None, order=None, limit=None):
-		"""Get a single result
+		"""Get all results
 
 			table = (str) table_name
 			fields = (field1, field2 ...) list of fields to select
