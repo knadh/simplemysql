@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# vim: fileencoding=utf-8: noexpandtab
 
 """
 	A very simple wrapper for MySQLdb
@@ -49,7 +49,7 @@ class SimpleMysql:
 			raise
 
 	
-	def getOne(self, table=None, fields='*', where=None, order=None, limit=None):
+	def getOne(self, table=None, fields='*', where=None, order=None, limit=(0, 1)):
 		"""Get a single result
 
 			table = (str) table_name
