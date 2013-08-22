@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf-8 -*-
+# vim: fileencoding=utf-8: noexpandtab
 
 """
 	A very simple wrapper for MySQLdb
@@ -30,10 +30,9 @@ class SimpleMysql:
 
 	def __init__(self, **kwargs):
 		self.conf = kwargs
-		self.conf["keep_alive"] = True if not "keep_alive" in kwargs \
-								  or self.conf["keep_alive"] else False
-
-		self.conf["charset"] = "utf-8" if not "charset" else self.conf["charset"]
+		self.conf["keep_alive"] = kwargs.get("keep_alive", False)
+		self.conf["charset"] = kwargs.get("charset", "utf8")
+		self.conf["host"] = kwargs.get("host", "localhost")
 
 		self.connect()
 
@@ -50,7 +49,7 @@ class SimpleMysql:
 			raise
 
 	
-	def getOne(self, table=None, fields='*', where=None, order=None, limit=None):
+	def getOne(self, table=None, fields='*', where=None, order=None, limit=(0, 1)):
 		"""Get a single result
 
 			table = (str) table_name
