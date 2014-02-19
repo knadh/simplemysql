@@ -122,8 +122,11 @@ class SimpleMysql:
 		query = self._serialize_insert(data)
 
 		sql = "INSERT INTO %s (%s) VALUES(%s)" % (table, query[0], query[1])
+		
+		rowcount = self.query(sql, data.values()).rowcount
+		self.conn.commit()
 
-		return self.query(sql, data.values()).rowcount
+		return rowcount
 
 
 	def update(self, table, data, where = None):
@@ -136,8 +139,11 @@ class SimpleMysql:
 		if where and len(where) > 0:
 			sql += " WHERE %s" % where[0]
 
-		return self.query(sql, data.values() + where[1] if where and len(where) > 1 else data.values()
+		rowcount = self.query(sql, data.values() + where[1] if where and len(where) > 1 else data.values()
 						).rowcount
+		self.conn.commit()
+
+		return rowcount
 
 
 	def insertOrUpdate(self, table, data, keys):
@@ -152,7 +158,10 @@ class SimpleMysql:
 
 		sql = "INSERT INTO %s (%s) VALUES(%s) ON DUPLICATE KEY UPDATE %s" % (table, insert[0], insert[1], update)
 
-		return self.query(sql, insert_data.values() + data.values() ).rowcount
+		rowcount = self.query(sql, insert_data.values() + data.values() ).rowcount
+		self.conn.commit()
+
+		return rowcount
 
 	def delete(self, table, where = None):
 		"""Delete rows based on a where condition"""
@@ -161,8 +170,11 @@ class SimpleMysql:
 
 		if where and len(where) > 0:
 			sql += " WHERE %s" % where[0]
+		
+		rowcount = self.query(sql, where[1] if where and len(where) > 1 else None).rowcount
+		self.conn.commit()
 
-		return self.query(sql, where[1] if where and len(where) > 1 else None).rowcount
+		return rowcount
 
 
 	def query(self, sql, params = None):
@@ -181,6 +193,8 @@ class SimpleMysql:
 		except:
 			print("Query failed")
 			raise
+
+		self.conn.commit()
 
 		return self.cur
 
