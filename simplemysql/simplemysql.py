@@ -184,6 +184,10 @@ class SimpleMysql:
 
 		return self.cur
 
+	def commit(self):
+		"""Commit a transaction (transactional engines like InnoDB require this)"""
+		return self.conn.commit()
+
 	def is_open(self):
 		"""Check if the connection is open"""
 		return self.conn.open

@@ -19,7 +19,7 @@ Or from the source
 from simplemysql import SimpleMysql
 
 db = SimpleMysql(
-	host="localhost",
+	host="127.0.0.1",
 	db="mydatabase",
 	user="username",
 	passwd="password",
@@ -113,7 +113,7 @@ books = db.getAll("books",
 ```
 
 
-##delete(table, fields[], condition[], order[], limit[])
+# delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)
 
 ```python
@@ -131,3 +131,5 @@ Run a raw SQL query. The MySQLdb cursor is returned.
 db.query("DELETE FROM books WHERE year > 2005")
 ```
 
+# commit()
+Insert, update, and delete operations on transactional databases such as innoDB need to be committed
