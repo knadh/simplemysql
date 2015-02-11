@@ -34,6 +34,7 @@ class SimpleMysql:
 		self.conf["charset"] = kwargs.get("charset", "utf8")
 		self.conf["host"] = kwargs.get("host", "localhost")
 		self.conf["port"] = kwargs.get("port", 3306)
+		self.conf["autocommit"] = kwargs.get("autocommit", False)
 
 		self.connect()
 
@@ -46,6 +47,7 @@ class SimpleMysql:
 										passwd=self.conf['passwd'],
 										charset=self.conf['charset'])
 			self.cur = self.conn.cursor()
+			self.conn.autocommit(self.conf["autocommit"])
 		except:
 			print ("MySQL connection failed")
 			raise
