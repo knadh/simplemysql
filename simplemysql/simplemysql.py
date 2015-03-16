@@ -147,10 +147,9 @@ class SimpleMysql:
 	def insertOrUpdate(self, table, data, keys):
 		insert_data = data.copy()
 
-		insert = self._serialize_insert(insert_data)
+		data = {k: data[k] for k in data if k not in keys}
 
-		for k in keys:
-			del data[k]
+		insert = self._serialize_insert(insert_data)
 
 		update = self._serialize_update(data)
 
