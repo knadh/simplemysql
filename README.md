@@ -35,7 +35,7 @@ print "The book's name is " + book.name
 ```
 
 #Query methods
-insert(), update(), delete(), getOne(), getAll(), query()
+insert(), update(), delete(), getOne(), getAll(), lastId(), query()
 
 ##insert(table, record{})
 Inserts a single record into a table.
@@ -111,7 +111,8 @@ books = db.getAll("books",
 	[0, 10]			# LIMIT 0, 10
 )
 ```
-
+# lastId()
+Get the last insert id
 
 # delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)

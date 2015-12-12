@@ -7,6 +7,7 @@
 	Methods:
 		getOne() - get a single row
 		getAll() - get all rows
+		lastId() - get the last insert id
 		insert() - insert a row
 		insertOrUpdate() - insert a row or update it if it exists
 		update() - update rows
@@ -92,6 +93,9 @@ class SimpleMysql:
 
 		return rows
 
+	def lastId(self):
+		"""Get the last insert id"""
+		return self.cur.lastrowid
 
 	def leftJoin(self, tables=(), fields=(), join_fields=(), where=None, order=None, limit=None):
 		"""Run an inner left join query
