@@ -34,6 +34,8 @@ class SimpleMysql:
 		self.conf["keep_alive"] = kwargs.get("keep_alive", False)
 		self.conf["charset"] = kwargs.get("charset", "utf8")
 		self.conf["host"] = kwargs.get("host", "localhost")
+		self.conf["port"] = kwargs.get("port", 3306)
+		self.conf["autocommit"] = kwargs.get("autocommit", False)
 
 		self.connect()
 
@@ -42,14 +44,16 @@ class SimpleMysql:
 
 		try:
 			self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
-										user=self.conf['user'], passwd=self.conf['passwd'],
+										port=self.conf['port'], user=self.conf['user'],
+										passwd=self.conf['passwd'],
 										charset=self.conf['charset'])
-			self.cur = self.conn.cursor() 
+			self.cur = self.conn.cursor()
+			self.conn.autocommit(self.conf["autocommit"])
 		except:
 			print ("MySQL connection failed")
 			raise
 
-	
+
 	def getOne(self, table=None, fields='*', where=None, order=None, limit=(0, 1)):
 		"""Get a single result
 
@@ -85,7 +89,7 @@ class SimpleMysql:
 
 		cur = self._select(table, fields, where, order, limit)
 		result = cur.fetchall()
-		
+
 		rows = None
 		if result:
 			Row = namedtuple("Row", [f[0] for f in cur.description])
@@ -111,7 +115,7 @@ class SimpleMysql:
 
 		cur = self._select_join(tables, fields, join_fields, where, order, limit)
 		result = cur.fetchall()
-		
+
 		rows = None
 		if result:
 			Row = namedtuple("Row", [f[0] for f in cur.description])
@@ -147,10 +151,9 @@ class SimpleMysql:
 	def insertOrUpdate(self, table, data, keys):
 		insert_data = data.copy()
 
-		insert = self._serialize_insert(insert_data)
+		data = {k: data[k] for k in data if k not in keys}
 
-		for k in keys:
-			del data[k]
+		insert = self._serialize_insert(insert_data)
 
 		update = self._serialize_update(data)
 
