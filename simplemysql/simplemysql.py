@@ -8,6 +8,7 @@
 		getOne() - get a single row
 		getAll() - get all rows
 		lastId() - get the last insert id
+		lastQuery() - get the last executed query
 		insert() - insert a row
 		insertOrUpdate() - insert a row or update it if it exists
 		update() - update rows
@@ -100,6 +101,13 @@ class SimpleMysql:
 	def lastId(self):
 		"""Get the last insert id"""
 		return self.cur.lastrowid
+
+	def lastQuery(self):
+		"""Get the last executed query"""
+		try:
+			return self.cur.statement
+		except AttributeError:
+			return self.cur._last_executed
 
 	def leftJoin(self, tables=(), fields=(), join_fields=(), where=None, order=None, limit=None):
 		"""Run an inner left join query
