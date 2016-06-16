@@ -37,16 +37,23 @@ class SimpleMysql:
 		self.conf["host"] = kwargs.get("host", "localhost")
 		self.conf["port"] = kwargs.get("port", 3306)
 		self.conf["autocommit"] = kwargs.get("autocommit", False)
-
+		self.conf["ssl"] = kwargs.get("ssl", False)
 		self.connect()
 
 	def connect(self):
 		"""Connect to the mysql server"""
 
 		try:
-			self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
+			if not ssl:
+			    self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
 										port=self.conf['port'], user=self.conf['user'],
 										passwd=self.conf['passwd'],
+										charset=self.conf['charset'])
+			else:
+			    self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
+										port=self.conf['port'], user=self.conf['user'],
+										passwd=self.conf['passwd'],
+										ssl=self.conf['ssl'],
 										charset=self.conf['charset'])
 			self.cur = self.conn.cursor()
 			self.conn.autocommit(self.conf["autocommit"])
