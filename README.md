@@ -15,6 +15,7 @@ Or from the source
 ```python setup.py install```
 
 #Usage
+#For normal connection
 ```python
 from simplemysql import SimpleMysql
 
@@ -25,7 +26,24 @@ db = SimpleMysql(
 	passwd="password",
 	keep_alive=True # try and reconnect timedout mysql connections?
 )
+```
+#For SSL Connection 
+```python
+from simplemysqlssl import SimpleMysql
 
+db = SimpleMysql(
+    host="127.0.0.1",
+    db="mydatabase",
+    user="username",
+    passwd="password",
+    ssl = {'cert': 'client-cert.pem', 'key': 'client-key.pem'},
+    keep_alive=True # try and reconnect timedout mysql connections?
+)
+
+```
+
+
+```python
 # insert a record to the <em>books</em> table
 db.insert("books", {"type": "paperback", "name": "Time Machine", "price": 5.55, year: "1997"})
 
