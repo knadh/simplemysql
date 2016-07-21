@@ -76,8 +76,8 @@ db.insert("books",
 )
 ```
 
-##getOne(table, fields[], condition[], order[], limit[])
-##getAll(table, fields[], condition[], order[], limit[])
+##getOne(table, fields[], where[], order[], limit[])
+##getAll(table, fields[], where[], order[], limit[])
 Get a single record or multiple records from a table given a condition (or no condition). The resultant rows are returned as namedtuples. getOne() returns a single namedtuple, and getAll() returns a list of namedtuples.
 
 ```python
