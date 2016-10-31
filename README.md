@@ -90,11 +90,6 @@ book = db.getOne("books", ["name", "year"], ("id=1"))
 ```
 
 ```python
-# get a row based on a simple hardcoded condition
-book = db.getOne("books", ["name", "year"], ("id=1"))
-```
-
-```python
 # get multiple rows based on a parametrized condition
 books = db.getAll("books",
 	["id", "name"],
