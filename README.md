@@ -70,7 +70,7 @@ Insert a new row, or update if there is a primary key conflict.
 
 ```python
 # insert a book with id 123. if it already exists, update values
-db.insert("books",
+db.insertOrUpdate("books",
 		{"id": 123, type": "paperback", "name": "Time Machine", "price": 5.55},
 		"id"
 )
