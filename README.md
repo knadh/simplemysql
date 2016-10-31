@@ -70,7 +70,7 @@ Insert a new row, or update if there is a primary key conflict.
 
 ```python
 # insert a book with id 123. if it already exists, update values
-db.insert("books",
+db.insertOrUpdate("books",
 		{"id": 123, type": "paperback", "name": "Time Machine", "price": 5.55},
 		"id"
 )
@@ -90,15 +90,10 @@ book = db.getOne("books", ["name", "year"], ("id=1"))
 ```
 
 ```python
-# get a row based on a simple hardcoded condition
-book = db.getOne("books", ["name", "year"], ("id=1"))
-```
-
-```python
 # get multiple rows based on a parametrized condition
 books = db.getAll("books",
 	["id", "name"],
-	("year > %s and price < 15", [year, 12.99])
+	("year > %s and price < %s", [year, 12.99])
 )
 ```
 
@@ -106,7 +101,7 @@ books = db.getAll("books",
 # get multiple rows based on a parametrized condition with an order and limit specified
 books = db.getAll("books",
 	["id", "name", "year"],
-	("year > %s and price < 15", [year, 12.99]),
+	("year > %s and price < %s", [year, 12.99]),
 	["year", "DESC"],	# ORDER BY year DESC
 	[0, 10]			# LIMIT 0, 10
 )
@@ -137,3 +132,8 @@ db.query("DELETE FROM books WHERE year > 2005")
 
 # commit()
 Insert, update, and delete operations on transactional databases such as innoDB need to be committed
+
+```python
+db.commit()
+```
+
