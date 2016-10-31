@@ -93,7 +93,7 @@ book = db.getOne("books", ["name", "year"], ("id=1"))
 # get multiple rows based on a parametrized condition
 books = db.getAll("books",
 	["id", "name"],
-	("year > %s and price < 15", [year, 12.99])
+	("year > %s and price < %s", [year, 12.99])
 )
 ```
 
@@ -101,7 +101,7 @@ books = db.getAll("books",
 # get multiple rows based on a parametrized condition with an order and limit specified
 books = db.getAll("books",
 	["id", "name", "year"],
-	("year > %s and price < 15", [year, 12.99]),
+	("year > %s and price < %s", [year, 12.99]),
 	["year", "DESC"],	# ORDER BY year DESC
 	[0, 10]			# LIMIT 0, 10
 )
