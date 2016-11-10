@@ -150,3 +150,6 @@ db.query("DELETE FROM books WHERE year > 2005")
 
 # commit()
 Insert, update, and delete operations on transactional databases such as innoDB need to be committed
+```python
+db.commit()
+```
