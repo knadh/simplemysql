@@ -44,7 +44,7 @@ class SimpleMysql:
 		"""Connect to the mysql server"""
 
 		try:
-			if not ssl:
+			if not self.conf["ssl"]:
 			    self.conn = MySQLdb.connect(db=self.conf['db'], host=self.conf['host'],
 										port=self.conf['port'], user=self.conf['user'],
 										passwd=self.conf['passwd'],
