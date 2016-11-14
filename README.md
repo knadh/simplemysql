@@ -126,9 +126,15 @@ books = db.getAll("books",
 ```
 # lastId()
 Get the last insert id
+```python
+db.lastId()
+```
 
 # lastQuery()
 Get the last query executed
+```python
+db.lastQuery()
+```
 
 # delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)
