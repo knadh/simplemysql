@@ -15,7 +15,7 @@ Or from the source
 ```python setup.py install```
 
 #Usage
-#For normal connection
+##For normal connection
 ```python
 from simplemysql import SimpleMysql
 
@@ -27,7 +27,7 @@ db = SimpleMysql(
 	keep_alive=True # try and reconnect timedout mysql connections?
 )
 ```
-#For SSL Connection 
+##For SSL Connection 
 ```python
 from simplemysqlssl import SimpleMysql
 
