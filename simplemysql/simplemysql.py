@@ -160,7 +160,6 @@ class SimpleMysql:
 		print query[1]
 		sql = "INSERT INTO %s (%s) VALUES %s" % (table, query[0], query[1])
 		flattened_values = [v for sublist in data for k,v in sublist.iteritems()]
-		print flattened_values
 		return self.query(sql,flattened_values).rowcount
 
 	def update(self, table, data, where = None):
@@ -246,8 +245,6 @@ class SimpleMysql:
 		"""Format insert dict values into strings"""
 		keys = ",".join( data[0].keys() )
 		v = "(%s)" % ",".join(tuple("%s".rstrip(',') for v in range(len(data[0]))))
-		#vals = ",".join(["("+",".join(["%s" for k in l])+")" for l in data])
-                print "The val of v is "+v
 		l = ','.join(list(repeat(v,len(data))))
 		return [keys, l]
 
