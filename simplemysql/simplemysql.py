@@ -21,7 +21,6 @@
 
 	Kailash Nadh, http://nadh.in
 	May 2013
-	Subhash Dasyam (subhashdasyam), Nov 2016
 """
 
 import MySQLdb
