@@ -10,6 +10,7 @@
 		lastId() - get the last insert id
 		lastQuery() - get the last executed query
 		insert() - insert a row
+		insertBatch() - Batch Insert
 		insertOrUpdate() - insert a row or update it if it exists
 		update() - update rows
 		delete() - delete rows
@@ -24,6 +25,8 @@
 
 import MySQLdb
 from collections import namedtuple
+from itertools import repeat
+
 
 class SimpleMysql:
 	conn = None
@@ -148,6 +151,15 @@ class SimpleMysql:
 
 		return self.query(sql, data.values()).rowcount
 
+	def insertBatch(self, table, data):
+		"""Insert multiple record"""
+
+		query = self._serialize_batch_insert(data)
+		print query
+		print query[1]
+		sql = "INSERT INTO %s (%s) VALUES %s" % (table, query[0], query[1])
+		flattened_values = [v for sublist in data for k,v in sublist.iteritems()]
+		return self.query(sql,flattened_values).rowcount
 
 	def update(self, table, data, where = None):
 		"""Insert a record"""
@@ -228,6 +240,12 @@ class SimpleMysql:
 
 		return [keys, vals]
 
+	def _serialize_batch_insert(self, data):
+		"""Format insert dict values into strings"""
+		keys = ",".join( data[0].keys() )
+		v = "(%s)" % ",".join(tuple("%s".rstrip(',') for v in range(len(data[0]))))
+		l = ','.join(list(repeat(v,len(data))))
+		return [keys, l]
 
 	def _serialize_update(self, data):
 		"""Format update dict values into string"""

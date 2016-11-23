@@ -82,6 +82,13 @@ db.update("books",
 	("id=%s AND year=%s", [id, year])
 )
 ```
+##insertBatch(table, rows{})
+Insert Multiple values into table.
+
+```python
+# insert multiple values in table
+db.insertBatch("books", [{"discount": 0},{"discount":1},{"discount":3}])
+```
 
 ##insertOrUpdate(table, row{}, key)
 Insert a new row, or update if there is a primary key conflict.
@@ -156,6 +163,3 @@ db.query("DELETE FROM books WHERE year > 2005")
 
 # commit()
 Insert, update, and delete operations on transactional databases such as innoDB need to be committed
-```python
-db.commit()
-```
