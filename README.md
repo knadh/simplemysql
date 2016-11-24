@@ -29,7 +29,7 @@ db = SimpleMysql(
 ```
 ##For SSL Connection 
 ```python
-from simplemysqlssl import SimpleMysql
+from simplemysql import SimpleMysql
 
 db = SimpleMysql(
     host="127.0.0.1",
