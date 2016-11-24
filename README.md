@@ -15,6 +15,7 @@ Or from the source
 ```python setup.py install```
 
 #Usage
+##For normal connection
 ```python
 from simplemysql import SimpleMysql
 
@@ -25,7 +26,24 @@ db = SimpleMysql(
 	passwd="password",
 	keep_alive=True # try and reconnect timedout mysql connections?
 )
+```
+##For SSL Connection 
+```python
+from simplemysqlssl import SimpleMysql
 
+db = SimpleMysql(
+    host="127.0.0.1",
+    db="mydatabase",
+    user="username",
+    passwd="password",
+    ssl = {'cert': 'client-cert.pem', 'key': 'client-key.pem'},
+    keep_alive=True # try and reconnect timedout mysql connections?
+)
+
+```
+
+
+```python
 # insert a record to the <em>books</em> table
 db.insert("books", {"type": "paperback", "name": "Time Machine", "price": 5.55, year: "1997"})
 
@@ -77,14 +95,14 @@ Insert a new row, or update if there is a primary key conflict.
 
 ```python
 # insert a book with id 123. if it already exists, update values
-db.insert("books",
+db.insertOrUpdate("books",
 		{"id": 123, type": "paperback", "name": "Time Machine", "price": 5.55},
 		"id"
 )
 ```
 
-##getOne(table, fields[], condition[], order[], limit[])
-##getAll(table, fields[], condition[], order[], limit[])
+##getOne(table, fields[], where[], order[], limit[])
+##getAll(table, fields[], where[], order[], limit[])
 Get a single record or multiple records from a table given a condition (or no condition). The resultant rows are returned as namedtuples. getOne() returns a single namedtuple, and getAll() returns a list of namedtuples.
 
 ```python
@@ -97,15 +115,10 @@ book = db.getOne("books", ["name", "year"], ("id=1"))
 ```
 
 ```python
-# get a row based on a simple hardcoded condition
-book = db.getOne("books", ["name", "year"], ("id=1"))
-```
-
-```python
 # get multiple rows based on a parametrized condition
 books = db.getAll("books",
 	["id", "name"],
-	("year > %s and price < 15", [year, 12.99])
+	("year > %s and price < %s", [year, 12.99])
 )
 ```
 
@@ -113,16 +126,22 @@ books = db.getAll("books",
 # get multiple rows based on a parametrized condition with an order and limit specified
 books = db.getAll("books",
 	["id", "name", "year"],
-	("year > %s and price < 15", [year, 12.99]),
+	("year > %s and price < %s", [year, 12.99]),
 	["year", "DESC"],	# ORDER BY year DESC
 	[0, 10]			# LIMIT 0, 10
 )
 ```
 # lastId()
 Get the last insert id
+```python
+db.lastId()
+```
 
 # lastQuery()
 Get the last query executed
+```python
+db.lastQuery()
+```
 
 # delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)
@@ -144,3 +163,8 @@ db.query("DELETE FROM books WHERE year > 2005")
 
 # commit()
 Insert, update, and delete operations on transactional databases such as innoDB need to be committed
+
+```python
+db.commit()
+```
+ 
