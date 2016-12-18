@@ -155,8 +155,6 @@ class SimpleMysql:
 		"""Insert multiple record"""
 
 		query = self._serialize_batch_insert(data)
-		print query
-		print query[1]
 		sql = "INSERT INTO %s (%s) VALUES %s" % (table, query[0], query[1])
 		flattened_values = [v for sublist in data for k,v in sublist.iteritems()]
 		return self.query(sql,flattened_values).rowcount
