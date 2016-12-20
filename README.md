@@ -14,8 +14,8 @@ Or from the source
 
 ```python setup.py install```
 
-#Usage
-##For normal connection
+# Usage
+## For normal connection
 ```python
 from simplemysql import SimpleMysql
 
@@ -27,7 +27,7 @@ db = SimpleMysql(
 	keep_alive=True # try and reconnect timedout mysql connections?
 )
 ```
-##For SSL Connection 
+## For SSL Connection
 ```python
 from simplemysql import SimpleMysql
 
@@ -52,10 +52,10 @@ book = db.getOne("books", ["name"], ["year = 1997"])
 print "The book's name is " + book.name
 ```
 
-#Query methods
+# Query methods
 insert(), update(), delete(), getOne(), getAll(), lastId(), query()
 
-##insert(table, record{})
+## insert(table, record{})
 Inserts a single record into a table.
 
 ```python
@@ -63,7 +63,7 @@ db.insert("food", {"type": "fruit", "name": "Apple", "color": "red"})
 db.insert("books", {"type": "paperback", "name": "Time Machine", "price": 5.55})
 ```
 
-##update(table, row{}, condition[])
+## update(table, row{}, condition[])
 Update one more or rows based on a condition (or no condition).
 
 ```python
@@ -82,7 +82,7 @@ db.update("books",
 	("id=%s AND year=%s", [id, year])
 )
 ```
-##insertBatch(table, rows{})
+## insertBatch(table, rows{})
 Insert Multiple values into table.
 
 ```python
@@ -90,7 +90,7 @@ Insert Multiple values into table.
 db.insertBatch("books", [{"discount": 0},{"discount":1},{"discount":3}])
 ```
 
-##insertOrUpdate(table, row{}, key)
+## insertOrUpdate(table, row{}, key)
 Insert a new row, or update if there is a primary key conflict.
 
 ```python
@@ -101,8 +101,8 @@ db.insertOrUpdate("books",
 )
 ```
 
-##getOne(table, fields[], where[], order[], limit[])
-##getAll(table, fields[], where[], order[], limit[])
+## getOne(table, fields[], where[], order[], limit[])
+## getAll(table, fields[], where[], order[], limit[])
 Get a single record or multiple records from a table given a condition (or no condition). The resultant rows are returned as namedtuples. getOne() returns a single namedtuple, and getAll() returns a list of namedtuples.
 
 ```python
@@ -131,19 +131,21 @@ books = db.getAll("books",
 	[0, 10]			# LIMIT 0, 10
 )
 ```
-# lastId()
+## lastId()
 Get the last insert id
 ```python
+# get the last insert ID
 db.lastId()
 ```
 
-# lastQuery()
+## lastQuery()
 Get the last query executed
 ```python
+# get the SQL of the last executed query
 db.lastQuery()
 ```
 
-# delete(table, fields[], condition[], order[], limit[])
+## delete(table, fields[], condition[], order[], limit[])
 Delete one or more records based on a condition (or no condition)
 
 ```python
@@ -154,17 +156,18 @@ db.delete("books")
 db.delete("books", ("price > %s AND year < %s", [25, 1999]))
 ```
 
-##query(table)
+## query(table)
 Run a raw SQL query. The MySQLdb cursor is returned.
 
 ```python
+# run a raw SQL query
 db.query("DELETE FROM books WHERE year > 2005")
 ```
 
-# commit()
+## commit()
 Insert, update, and delete operations on transactional databases such as innoDB need to be committed
 
 ```python
+# Commit all pending transaction queries
 db.commit()
 ```
- 
