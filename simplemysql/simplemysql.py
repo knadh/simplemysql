@@ -203,7 +203,7 @@ class SimpleMysql:
 		# check if connection is alive. if not, reconnect
 		try:
 			self.cur.execute(sql, params)
-		except MySQLdb.OperationalError, e:
+		except MySQLdb.OperationalError as e:
 			# mysql timed out. reconnect and retry once
 			if e[0] == 2006:
 				self.connect()
