@@ -270,7 +270,6 @@ class SimpleMysql:
             if len(limit) > 1:
                 sql += ", %s" % limit[1]
 
-        print(sql)
         return self.query(sql, where[1] if where and len(where) > 1 else None)
 
     def _select_join(self, tables=(), fields=(), join_fields=(), where=None, order=None, limit=None):
