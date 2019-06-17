@@ -18,11 +18,10 @@ setup(
 		"Programming Language :: Python",
 		"Natural Language :: English",
 		"License :: OSI Approved :: GNU General Public License v2 (GPLv2)",
-		"Programming Language :: Python :: 2.6",
-		"Programming Language :: Python :: 2.7",
+		"Programming Language :: Python :: 3.5",
 		"Topic :: Software Development :: Libraries :: Python Modules",
 		"Topic :: Database",
 		"Topic :: Software Development :: Libraries"
 	],
-	install_requires=["mysql-python"]
+	install_requires=["mysqlclient"]
 )
