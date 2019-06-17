@@ -149,14 +149,16 @@ class SimpleMysql:
 
         sql = "INSERT INTO %s (%s) VALUES(%s)" % (table, query[0], query[1])
 
-        return self.query(sql, data.values()).rowcount
+        return self.query(sql, tuple(data.values())).rowcount
 
     def insertBatch(self, table, data):
         """Insert multiple record"""
 
         query = self._serialize_batch_insert(data)
         sql = "INSERT INTO %s (%s) VALUES %s" % (table, query[0], query[1])
-        flattened_values = [v for sublist in data for k, v in sublist.iteritems()]
+
+        flattened_values = [v for sublist in data for k, v in iter(sublist.items())]
+
         return self.query(sql, flattened_values).rowcount
 
     def update(self, table, data, where=None):
@@ -169,8 +171,11 @@ class SimpleMysql:
         if where and len(where) > 0:
             sql += " WHERE %s" % where[0]
 
-        return self.query(sql, data.values() + where[1] if where and len(where) > 1 else data.values()
-                          ).rowcount
+        values = tuple(data.values())
+
+        return self.query(
+            sql, values + where[1] if where and len(where) > 1 else values
+        ).rowcount
 
     def insertOrUpdate(self, table, data, keys):
         insert_data = data.copy()
@@ -178,12 +183,11 @@ class SimpleMysql:
         data = {k: data[k] for k in data if k not in keys}
 
         insert = self._serialize_insert(insert_data)
-
         update = self._serialize_update(data)
 
         sql = "INSERT INTO %s (%s) VALUES(%s) ON DUPLICATE KEY UPDATE %s" % (table, insert[0], insert[1], update)
 
-        return self.query(sql, insert_data.values() + data.values()).rowcount
+        return self.query(sql, tuple(insert_data.values()) + tuple(data.values())).rowcount
 
     def delete(self, table, where=None):
         """Delete rows based on a where condition"""
@@ -195,10 +199,22 @@ class SimpleMysql:
 
         return self.query(sql, where[1] if where and len(where) > 1 else None).rowcount
 
+    def addIndex(self, table, index_name, fields=[]):
+        sanitized_fields = ','.join(fields)
+        sql = 'ALTER TABLE %s ADD INDEX %s (%s)' % (table, index_name, sanitized_fields)
+
+        return self.query(sql)
+
+    def dropIndex(self, table_name, index_name):
+        sql = 'ALTER TABLE %s DROP INDEX %s' % (table_name, index_name)
+
+        return self.query(sql)
+
     def query(self, sql, params=None):
         """Run a raw query"""
 
         # check if connection is alive. if not, reconnect
+
         try:
             self.cur.execute(sql, params)
         except mysql.OperationalError as e:
@@ -227,7 +243,7 @@ class SimpleMysql:
         self.cur.close()
         self.conn.close()
 
-    # ===
+        # ===
 
     def _serialize_insert(self, data):
         """Format insert dict values into strings"""
@@ -238,9 +254,11 @@ class SimpleMysql:
 
     def _serialize_batch_insert(self, data):
         """Format insert dict values into strings"""
+
         keys = ",".join(data[0].keys())
         v = "(%s)" % ",".join(tuple("%s".rstrip(',') for v in range(len(data[0]))))
         l = ','.join(list(repeat(v, len(data))))
+
         return [keys, l]
 
     def _serialize_update(self, data):
